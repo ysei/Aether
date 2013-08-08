@@ -265,6 +265,103 @@ START_TEST(test_processor_sr_interrupt_priority_state_write)
 }
 END_TEST
 
+START_TEST(test_processor_register_index)
+{
+	processor_t processor;
+
+	processor_sr_user_state_set(&processor);
+
+	ck_assert_int_eq(processor_register_index(&processor, A7), ISP);
+
+	processor_sr_user_state_clear(&processor);
+
+	ck_assert_int_eq(processor_register_index(&processor, A7), USP);
+	ck_assert_int_eq(processor_register_index(&processor, D0), D0);
+}
+END_TEST
+
+START_TEST(test_processor_register_read_byte)
+{
+	processor_t processor;
+
+	processor.registers[processor_register_index(&processor, D0)] = 0xFF;
+
+	ck_assert_int_eq(processor_register_read_byte(&processor, D0), 0xFF);
+}
+END_TEST
+
+START_TEST(test_processor_register_read_word)
+{
+	processor_t processor;
+
+	processor.registers[processor_register_index(&processor, D0)] = 0xFFFF;
+
+	ck_assert_int_eq(processor_register_read_word(&processor, D0), 0xFFFF);
+}
+END_TEST
+
+START_TEST(test_processor_register_read_long_word)
+{
+	processor_t processor;
+
+	processor.registers[processor_register_index(&processor, D0)] = 0xFFFFFFFF;
+
+	ck_assert_int_eq(processor_register_read_long_word(&processor, D0), 0xFFFFFFFF);
+}
+END_TEST
+
+START_TEST(test_processor_register_read_quad_word)
+{
+	processor_t processor;
+
+	processor.registers[processor_register_index(&processor, D0)] = 0xFFFF0000;
+	processor.registers[processor_register_index(&processor, D1)] = 0xFFFF0000;
+
+	ck_assert_int_eq(processor_register_read_quad_word(&processor, D0, D1), 0xFFFF0000FFFF0000);
+}
+END_TEST
+
+START_TEST(test_processor_register_write_byte)
+{
+	processor_t processor;
+
+	processor_register_write_byte(&processor, D0, 0xFF);
+
+	ck_assert_int_eq(processor.registers[processor_register_index(&processor, D0)], 0xFF);
+}
+END_TEST
+
+START_TEST(test_processor_register_write_word)
+{
+	processor_t processor;
+
+	processor_register_write_word(&processor, D0, 0xFFFF);
+
+	ck_assert_int_eq(processor.registers[processor_register_index(&processor, D0)], 0xFFFF);
+}
+END_TEST
+
+START_TEST(test_processor_register_write_long_word)
+{
+	processor_t processor;
+
+	processor_register_write_long_word(&processor, D0, 0xFFFFFFFF);
+
+	ck_assert_int_eq(processor.registers[processor_register_index(&processor, D0)], 0xFFFFFFFF);
+}
+END_TEST
+
+START_TEST(test_processor_register_write_quad_word)
+{
+	processor_t processor;
+
+	processor_register_write_quad_word(&processor, D0, D1, 0xFFFF0000FFFF0000);
+
+	ck_assert_int_eq(processor.registers[processor_register_index(&processor, D0)], 0xFFFF0000);
+	ck_assert_int_eq(processor.registers[processor_register_index(&processor, D1)], 0xFFFF0000);
+}
+END_TEST
+
 Suite *processor_suite()
 {
 	Suite *suite = suite_create("processor");
@@ -296,6 +393,16 @@ Suite *processor_suite()
 
 	tcase_add_test(tc_core, test_processor_sr_interrupt_priority_state_read);
 	tcase_add_test(tc_core, test_processor_sr_interrupt_priority_state_write);
+
+	tcase_add_test(tc_core, test_processor_register_index);
+	tcase_add_test(tc_core, test_processor_register_read_byte);	
+	tcase_add_test(tc_core, test_processor_register_read_word);
+	tcase_add_test(tc_core, test_processor_register_read_long_word);
+	tcase_add_test(tc_core, test_processor_register_read_quad_word);
+	tcase_add_test(tc_core, test_processor_register_write_byte);
+	tcase_add_test(tc_core, test_processor_register_write_word);
+	tcase_add_test(tc_core, test_processor_register_write_long_word);
+	tcase_add_test(tc_core, test_processor_register_write_quad_word);
 
 	suite_add_tcase(suite, tc_core);
 

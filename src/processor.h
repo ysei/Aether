@@ -43,6 +43,18 @@ inline uint8_t processor_sr_interrupt_priority_state_read(processor_t *processor
 
 inline void processor_sr_interrupt_priority_state_write(processor_t *processor, uint8_t value);
 
+inline int processor_register_index(processor_t *processor, int index);
+
+inline uint8_t processor_register_read_byte(processor_t *processor, int index);
+inline uint16_t processor_register_read_word(processor_t *processor, int index);
+inline uint32_t processor_register_read_long_word(processor_t *processor, int index);
+inline uint64_t processor_register_read_quad_word(processor_t *processor, int index_x, int index_y);
+
+inline void processor_register_write_byte(processor_t *processor, int index, uint8_t value);
+inline void processor_register_write_word(processor_t *processor, int index, uint16_t value);
+inline void processor_register_write_long_word(processor_t *processor, int index, uint32_t value);
+inline void processor_register_write_quad_word(processor_t *processor, int index_x, int index_y, uint64_t value);
+
 enum registers
 {
 	D0,
@@ -61,7 +73,8 @@ enum registers
 	A5,
 	A6,
 	USP,
-	ISP
+	ISP,
+	A7
 };
 
 #endif /* PROCESSOR_H */
