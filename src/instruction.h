@@ -3,7 +3,29 @@
 
 #include <stdint.h>
 
+enum conditions
+{
+	T,
+	F,
+	HI,
+	LS,
+	CC,
+	CS,
+	NE,
+	EQ,
+	VC,
+	VS,
+	PL,
+	MI,
+	GE,
+	LT,
+	GT,
+	LE	
+};
+
 inline uint8_t instruction_operation_extract_operation_code(uint16_t instruction);
+inline uint8_t instruction_operation_extract_condition(uint16_t instruction);
+inline uint8_t instruction_operation_extract_operation_mode(uint16_t instruction);
 inline uint8_t instruction_operation_extract_mode(uint16_t instruction);
 inline uint8_t instruction_operation_extract_register_low(uint16_t instruction);
 inline uint8_t instruction_operation_extract_register_high(uint16_t instruction);

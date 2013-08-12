@@ -362,6 +362,82 @@ START_TEST(test_processor_register_write_quad_word)
 }
 END_TEST
 
+START_TEST(test_processor_memory_read_byte)
+{
+	processor_t processor;
+
+	processor.memory = malloc(32);
+
+	processor.memory[0x00] = 0xFF;
+
+	ck_assert_int_eq(processor_memory_read_byte(&processor, 0x00), 0xFF);
+}
+END_TEST
+
+START_TEST(test_processor_memory_read_word)
+{
+	processor_t processor;
+
+	processor.memory = malloc(32);
+
+	processor.memory[0x00] = 0xFF;
+	processor.memory[0x01] = 0x00;
+
+	ck_assert_int_eq(processor_memory_read_word(&processor, 0x00), 0xFF00);
+}
+END_TEST
+
+START_TEST(test_processor_memory_read_long_word)
+{
+	processor_t processor;
+
+	processor.memory = malloc(32);
+
+	processor.memory[0x00] = 0xFF;
+	processor.memory[0x01] = 0x00;
+	processor.memory[0x02] = 0xFF;
+	processor.memory[0x03] = 0x00;
+
+	ck_assert_int_eq(processor_memory_read_long_word(&processor, 0x00), 0xFF00FF00);
+}
+END_TEST
+
+START_TEST(test_processor_memory_write_byte)
+{
+	processor_t processor;
+
+	processor.memory = malloc(32);
+
+	processor_memory_write_byte(&processor, 0x00, 0xFF);
+	
+	ck_assert_int_eq(processor_memory_read_byte(&processor, 0x00), 0xFF);
+}
+END_TEST
+
+START_TEST(test_processor_memory_write_word)
+{
+	processor_t processor;
+
+	processor.memory = malloc(32);
+
+	processor_memory_write_word(&processor, 0x00, 0xFF00);
+
+	ck_assert_int_eq(processor_memory_read_word(&processor, 0x00), 0xFF00);
+}
+END_TEST
+
+START_TEST(test_processor_memory_write_long_word)
+{
+	processor_t processor;
+
+	processor.memory = malloc(32);
+
+	processor_memory_write_long_word(&processor, 0x00, 0xFF00FF00);
+
+	ck_assert_int_eq(processor_memory_read_long_word(&processor, 0x00), 0xFF00FF00);
+}
+END_TEST
+
 Suite *processor_suite()
 {
 	Suite *suite = suite_create("processor");
@@ -403,6 +479,13 @@ Suite *processor_suite()
 	tcase_add_test(tc_core, test_processor_register_write_word);
 	tcase_add_test(tc_core, test_processor_register_write_long_word);
 	tcase_add_test(tc_core, test_processor_register_write_quad_word);
+
+	tcase_add_test(tc_core, test_processor_memory_read_byte);	
+	tcase_add_test(tc_core, test_processor_memory_read_word);
+	tcase_add_test(tc_core, test_processor_memory_read_long_word);
+	tcase_add_test(tc_core, test_processor_memory_write_byte);
+	tcase_add_test(tc_core, test_processor_memory_write_word);
+	tcase_add_test(tc_core, test_processor_memory_write_long_word);
 
 	suite_add_tcase(suite, tc_core);
 

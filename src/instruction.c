@@ -9,6 +9,16 @@ inline uint8_t instruction_operation_extract_operation_code(uint16_t instruction
 	return (instruction >> 0x0C) & 0x0F;
 }
 
+inline uint8_t instruction_operation_extract_condition(uint16_t instruction)
+{
+	return (instruction >> 0x08) & 0x0F;
+}
+
+inline uint8_t instruction_operation_extract_operation_mode(uint16_t instruction)
+{
+	return (instruction >> 0x06) & 0x07;
+}
+
 inline uint8_t instruction_operation_extract_mode(uint16_t instruction)
 {
 	return (instruction >> 0x03) & 0x07;

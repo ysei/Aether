@@ -55,6 +55,14 @@ inline void processor_register_write_word(processor_t *processor, int index, uin
 inline void processor_register_write_long_word(processor_t *processor, int index, uint32_t value);
 inline void processor_register_write_quad_word(processor_t *processor, int index_x, int index_y, uint64_t value);
 
+inline uint8_t processor_memory_read_byte(processor_t *processor, uint32_t address);
+inline uint16_t processor_memory_read_word(processor_t *processor, uint32_t address);
+inline uint32_t processor_memory_read_long_word(processor_t *processor, uint32_t address);
+
+inline void processor_memory_write_byte(processor_t *processor, uint32_t address, uint8_t value);
+inline void processor_memory_write_word(processor_t *processor, uint32_t address, uint16_t value);
+inline void processor_memory_write_long_word(processor_t *processor, uint32_t address, uint32_t value);
+
 enum registers
 {
 	D0,

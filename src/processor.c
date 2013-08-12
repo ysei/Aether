@@ -1,6 +1,9 @@
+#include <stdio.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #include "processor.h"
+#include "instruction.h"
 
 /* functions to read bits of the condition code register */
 
@@ -196,53 +199,38 @@ inline void processor_register_write_quad_word(processor_t *processor, int index
 	processor_register_write_long_word(processor, index_y, (uint32_t)((value >> 0x00) & 0xFFFFFFFF));
 }
 
-/* functions to interpret machine code */
+/* functions to read from and write to memory */
 
-void processor_execute(processor_t *processor, int cycles)
+inline uint8_t processor_memory_read_byte(processor_t *processor, uint32_t address)
 {
-	while(cycles > 0)
-	{
-		cycles -= processor_step(processor);
-	}
+	return processor->memory[address];
 }
 
-int processor_step(processor_t *processor)
+inline uint16_t processor_memory_read_word(processor_t *processor, uint32_t address)
 {
-	uint16_t instruction = processor->memory[processor->pc++];
-	
-	switch(instruction_operation_extract_operation_code(instruction))
-	{
-		case 0x00:
-			break;
-		case 0x01:
-			break;
-		case 0x02:
-			break;
-		case 0x03:
-			break;
-		case 0x04:
-			break;
-		case 0x05:
-			break;
-		case 0x06:
-			break;
-		case 0x07:
-			break;
-		case 0x08:
-			break;
-		case 0x09:
-			break;
-		case 0x0A:
-			break;
-		case 0x0B:
-			break;
-		case 0x0C:
-			break;
-		case 0x0D:
-			break;
-		case 0x0E:
-			break;
-		case 0x0F:
-			break;
-	}
+	return (processor->memory[address] << 0x08) | (processor->memory[address + 1] << 0x00);
+}
+
+inline uint32_t processor_memory_read_long_word(processor_t *processor, uint32_t address)
+{
+	return (processor->memory[address] << 0x18) | (processor->memory[address + 1] << 0x10) | (processor->memory[address + 2] << 0x08) | (processor->memory[address + 3] << 0x00); 
+}
+
+inline void processor_memory_write_byte(processor_t *processor, uint32_t address, uint8_t value)
+{
+	processor->memory[address] = value;
+}
+
+inline void processor_memory_write_word(processor_t *processor, uint32_t address, uint16_t value)
+{
+	processor->memory[address] = (value >> 0x08) & 0xFF;
+	processor->memory[address + 1] = (value >> 0x00) & 0xFF;
+}
+
+inline void processor_memory_write_long_word(processor_t *processor, uint32_t address, uint32_t value)
+{
+	processor->memory[address] = (value >> 0x18) & 0xFF;
+	processor->memory[address + 1] = (value >> 0x10) & 0xFF;
+	processor->memory[address + 2] = (value >> 0x08) & 0xFF;
+	processor->memory[address + 3] = (value >> 0x00) & 0xFF;
 }

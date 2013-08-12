@@ -21,6 +21,22 @@ START_TEST(test_instruction_operation_extract_mode)
 }
 END_TEST
 
+START_TEST(test_instruction_operation_extract_condition)
+{
+	uint8_t condition = instruction_operation_extract_condition(0x0F00);
+
+	ck_assert_int_eq(condition, 0x0F);
+}
+END_TEST
+
+START_TEST(test_instruction_operation_extract_operation_mode)
+{
+	uint8_t operation_mode = instruction_operation_extract_operation_mode(0x01C0);
+
+	ck_assert_int_eq(operation_mode, 0x07);
+}
+END_TEST
+
 START_TEST(test_instruction_operation_extract_register)
 {
 	uint8_t reg = instruction_operation_extract_register_low(0x0007);
@@ -121,6 +137,8 @@ Suite *instruction_suite(void)
 
 	tcase_add_test(tcase_core, test_instruction_operation_extract_operation_code);
 	tcase_add_test(tcase_core, test_instruction_operation_extract_mode);
+	tcase_add_test(tcase_core, test_instruction_operation_extract_condition);
+	tcase_add_test(tcase_core, test_instruction_operation_extract_operation_mode);
 	tcase_add_test(tcase_core, test_instruction_operation_extract_register);	
 	tcase_add_test(tcase_core, test_instruction_extension_extract_da);
 	tcase_add_test(tcase_core, test_instruction_extension_extract_register);
